@@ -12,11 +12,11 @@ from pathlib import Path
 
 FORMAT = "horizon.v0"
 SUITES = ("ed25519", "UFHY1", "mldsa87")
-CIBLES = ("unforge", "situs", "figure", "quelle", "temoin", "mesure")
+CIBLES = ("unforge", "situs", "figure", "quelle", "temoin")
 HYPOTHESES = {
     "ed25519": "Shor n'existe pas encore à cette taille",
-    "UFHY1": "au moins une des deux signatures survit",
-    "mldsa87": "on ne fait plus confiance à l'elliptique",
+    "UFHY1": "Ed25519 + ML-DSA-65 ; au moins une des deux signatures survit",
+    "mldsa87": "ML-DSA-87 seul. QUANTUM v0 ne signe pas encore ça",
 }
 
 
@@ -45,7 +45,7 @@ def ecrire(
         raise SystemExit("suite : ed25519 | UFHY1 | mldsa87")
     cible = (cible or "unforge").strip().lower()
     if cible not in CIBLES:
-        raise SystemExit("cible : unforge | situs | figure | quelle | temoin | mesure")
+        raise SystemExit("cible : unforge | situs | figure | quelle | temoin")
     try:
         jour = _parse_jour(re_presser_avant)
     except ValueError:
