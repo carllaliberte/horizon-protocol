@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""HORIZON v0 — écrire / lire / juger une date de ressellage. Pas de QPU inventé."""
+"""HORIZON v0 — écrire / lire / juger / sceller une date de ressellage.
+
+Pas de QPU inventé. UFHY1 signe en local-v0 (Ed25519 AND ML-DSA-65).
+QUANTUM n'est pas ce processus.
+"""
 
 from __future__ import annotations
 
@@ -12,11 +16,11 @@ from pathlib import Path
 
 FORMAT = "horizon.v0"
 SUITES = ("ed25519", "UFHY1", "mldsa87")
-CIBLES = ("unforge", "situs", "figure", "quelle", "temoin")
+CIBLES = ("unforge", "situs", "figure", "quelle", "temoin", "mesure")
 HYPOTHESES = {
     "ed25519": "Shor n'existe pas encore à cette taille",
-    "UFHY1": "Ed25519 + ML-DSA-65 ; au moins une des deux signatures survit",
-    "mldsa87": "ML-DSA-87 seul. QUANTUM v0 ne signe pas encore ça",
+    "UFHY1": "au moins une des deux signatures survit",
+    "mldsa87": "on ne fait plus confiance à l'elliptique",
 }
 
 
@@ -45,7 +49,7 @@ def ecrire(
         raise SystemExit("suite : ed25519 | UFHY1 | mldsa87")
     cible = (cible or "unforge").strip().lower()
     if cible not in CIBLES:
-        raise SystemExit("cible : unforge | situs | figure | quelle | temoin")
+        raise SystemExit("cible : unforge | situs | figure | quelle | temoin | mesure")
     try:
         jour = _parse_jour(re_presser_avant)
     except ValueError:
@@ -64,7 +68,8 @@ def ecrire(
         "langue": langue,
         "pose_at": _now(),
         "revocable": True,
-        "note": "v0 non signée. QUANTUM signe plus tard. Périmé ≠ faux.",
+        "sceau": None,
+        "note": "v0. sceau=null jusqu'à `horizon sceller`. QUANTUM n'est pas ce processus. Périmé ≠ faux.",
     }
     return carte
 
@@ -98,14 +103,48 @@ def juger(carte: dict, aujourd: date | None = None) -> dict:
             "jours_restants": reste,
             "note": "périmé. le sceau n'est pas faux. resseller.",
         }
+    sceau = carte.get("sceau")
+    sceau_ok = None
+    if sceau and carte.get("suite") == "UFHY1":
+        from ufhy1 import verify as ufhy1_verify
+
+        payload = _payload(carte)
+        sceau_ok = ufhy1_verify(sceau, payload.encode("utf-8")).get("ok")
+        if not sceau_ok:
+            return {
+                "decision": "deny",
+                "flag": "horizon",
+                "suite": carte.get("suite"),
+                "re_presser_avant": carte["re_presser_avant"],
+                "jours_restants": reste,
+                "sceau_ok": False,
+                "note": "sceau UFHY1 refusé. AND today.",
+            }
     return {
         "decision": "allow",
         "flag": "horizon",
         "suite": carte.get("suite"),
         "re_presser_avant": carte["re_presser_avant"],
         "jours_restants": reste,
+        "sceau_ok": sceau_ok,
         "note": "dans l'hypothèse déclarée. encore " + str(reste) + " j.",
     }
+
+
+def _payload(carte: dict) -> str:
+    corps = {k: v for k, v in carte.items() if k != "sceau"}
+    return json.dumps(corps, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def sceller(carte: dict, keys: str = "keys") -> dict:
+    if carte.get("suite") != "UFHY1":
+        raise SystemExit("sceller v0 : seulement suite UFHY1")
+    from ufhy1 import sign as ufhy1_sign
+
+    carte["note"] = "scellé UFHY1 local-v0. AND today. QUANTUM n'est pas ce processus."
+    payload = _payload(carte)
+    carte["sceau"] = ufhy1_sign(payload.encode("utf-8"), keys)
+    return carte
 
 
 def main(argv=None) -> int:
@@ -123,6 +162,9 @@ def main(argv=None) -> int:
     pl.add_argument("fichier")
     pj = sub.add_parser("juger")
     pj.add_argument("fichier")
+    ps = sub.add_parser("sceller")
+    ps.add_argument("fichier")
+    ps.add_argument("--keys", default="keys")
     args = p.parse_args(argv)
     if args.cmd == "ecrire":
         carte = ecrire(
@@ -142,6 +184,12 @@ def main(argv=None) -> int:
         print(json.dumps(out, ensure_ascii=False, indent=2))
     elif args.cmd == "lire":
         print(json.dumps(lire(args.fichier), ensure_ascii=False, indent=2))
+    elif args.cmd == "sceller":
+        carte = sceller(lire(args.fichier), args.keys)
+        Path(args.fichier).write_text(
+            json.dumps(carte, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(json.dumps(carte, ensure_ascii=False, indent=2))
     else:
         print(json.dumps(juger(lire(args.fichier)), ensure_ascii=False, indent=2))
     return 0
