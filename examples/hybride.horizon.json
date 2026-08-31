@@ -1,0 +1,14 @@
+{
+  "format": "horizon.v0",
+  "horizon_id": "HZ-fictif-001",
+  "cible": "unforge",
+  "cible_id": null,
+  "suite": "UFHY1",
+  "hypothese": "au moins une des deux signatures survit",
+  "re_presser_avant": "2028-08-31",
+  "juridiction": "QC",
+  "langue": "fr-CA",
+  "pose_at": "2026-08-31T20:00:00Z",
+  "revocable": true,
+  "note": "Exemple fictif. Reseller avant 2028-08-31."
+}

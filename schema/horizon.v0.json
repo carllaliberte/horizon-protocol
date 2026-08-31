@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/carllaliberte/horizon-protocol/schema/horizon.v0.json",
+  "title": "HORIZON v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "horizon_id", "cible", "suite", "hypothese", "re_presser_avant", "juridiction", "langue", "pose_at", "revocable"],
+  "properties": {
+    "format": { "const": "horizon.v0" },
+    "horizon_id": { "type": "string" },
+    "cible": { "enum": ["unforge", "situs", "figure", "quelle", "temoin", "mesure"] },
+    "cible_id": { "type": ["string", "null"] },
+    "suite": { "enum": ["ed25519", "UFHY1", "mldsa87"] },
+    "hypothese": { "type": "string" },
+    "re_presser_avant": { "type": "string" },
+    "juridiction": { "type": "string", "examples": ["QC"] },
+    "langue": { "type": "string", "examples": ["fr-CA"] },
+    "pose_at": { "type": "string" },
+    "revocable": { "const": true },
+    "note": { "type": "string" }
+  }
+}
