@@ -8,7 +8,7 @@
   "properties": {
     "format": { "const": "horizon.v0" },
     "horizon_id": { "type": "string" },
-    "cible": { "enum": ["unforge", "situs", "figure", "quelle", "temoin", "mesure"] },
+    "cible": { "enum": ["unforge", "situs", "figure", "quelle", "temoin"] },
     "cible_id": { "type": ["string", "null"] },
     "suite": { "enum": ["ed25519", "UFHY1", "mldsa87"] },
     "hypothese": { "type": "string" },
