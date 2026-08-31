@@ -16,13 +16,14 @@ sceau  +  suite  +  hypothèse  +  re-presser-avant  →  fiche .horizon.json
 
 Trois suites, séparées :
 
-| Suite | Hypothèse déclarée |
-|---|---|
-| `ed25519` | Shor n'existe pas encore à cette taille |
-| `UFHY1` | au moins une des deux signatures survit |
-| `mldsa87` | on ne fait plus confiance à l'elliptique |
+| Suite | Ce que QUANTUM signe aujourd'hui | Hypothèse |
+|---|---|---|
+| `ed25519` | Ed25519 seul | Shor n'existe pas encore à cette taille |
+| `UFHY1` | `UFHY1:<ed>:<mldsa65>` | au moins une des deux signatures survit |
+| `mldsa87` | pas encore | on ne fait plus confiance à l'elliptique |
 
-Sans date : refus. Date déjà passée à l'écriture : refus.
+`UFHY1` = Ed25519 + **ML-DSA-65**. Un seul nom, une seule courbe.  
+`mldsa87` se déclare ; QUANTUM v0 ne le signe pas. Sans date : refus. Date déjà passée à l'écriture : refus.
 
 ## v0 au cellulaire
 
@@ -51,9 +52,9 @@ Un juge `deny` ne dit pas que le fichier est faux. Il dit : resseller.
 | [QUELLE](https://github.com/carllaliberte/quelle) | d'où le bit |
 | [TÉMOIN](https://github.com/carllaliberte/temoin-protocol) | avec quelle force |
 | [HORIZON](https://github.com/carllaliberte/horizon-protocol) | jusqu'à quand le sceau tient |
-| [MESURE](https://github.com/carllaliberte/mesure-protocol) | la lecture consomme |
 
-QUANTUM signe. Ce repo écrit et juge la date. Les clés restent hors Git.
+`unforge-check` peut *lire* une fiche HORIZON (`--horizon`). Il ne signe pas.  
+MIT (protocoles) · Apache-2.0 (œil UNFORGE). QUANTUM signe. Les clés restent hors Git.
 
 ## Fichiers
 
