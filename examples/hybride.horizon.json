@@ -4,11 +4,11 @@
   "cible": "unforge",
   "cible_id": null,
   "suite": "UFHY1",
-  "hypothese": "au moins une des deux signatures survit",
+  "hypothese": "Ed25519 + ML-DSA-65 ; au moins une des deux signatures survit",
   "re_presser_avant": "2028-08-31",
   "juridiction": "QC",
   "langue": "fr-CA",
   "pose_at": "2026-08-31T20:00:00Z",
   "revocable": true,
-  "note": "Exemple fictif. Reseller avant 2028-08-31."
+  "note": "Exemple fictif. Reseller avant 2028-08-31. UFHY1 = Ed25519 + ML-DSA-65."
 }
