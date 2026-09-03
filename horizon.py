@@ -36,6 +36,22 @@ def _parse_jour(s: str) -> date:
     return date.fromisoformat(s)
 
 
+def _exiger_jour(
+    s: str | None,
+    *,
+    manquant: str = "refus : re-presser-avant manquant",
+) -> date:
+    if s is None or not str(s).strip():
+        raise SystemExit(manquant)
+    raw = str(s).strip()
+    if raw in SUITES:
+        raise SystemExit("refus : suite, pas une date. UFHY1 = Ed25519 + ML-DSA-65")
+    try:
+        return _parse_jour(raw)
+    except ValueError:
+        raise SystemExit("re-presser-avant : YYYY-MM-DD") from None
+
+
 def ecrire(
     suite: str,
     re_presser_avant: str,
@@ -50,10 +66,7 @@ def ecrire(
     cible = (cible or "unforge").strip().lower()
     if cible not in CIBLES:
         raise SystemExit("cible : unforge | situs | figure | quelle | temoin | mesure")
-    try:
-        jour = _parse_jour(re_presser_avant)
-    except ValueError:
-        raise SystemExit("re-presser-avant : YYYY-MM-DD") from None
+    jour = _exiger_jour(re_presser_avant)
     if jour <= _aujourd_hui():
         raise SystemExit("refus : date déjà passée. un horizon se pose devant soi")
     carte = {
@@ -69,7 +82,7 @@ def ecrire(
         "pose_at": _now(),
         "revocable": True,
         "sceau": None,
-        "note": "v0. sceau=null jusqu'à `horizon sceller`. QUANTUM n'est pas ce processus. Périmé ≠ faux.",
+        "note": "v0. sceau=null. Périmé ≠ faux. Reseller.",
     }
     return carte
 
@@ -81,20 +94,21 @@ def lire(chemin: str) -> dict:
         raise SystemExit("pas une fiche horizon.v0")
     if carte.get("suite") not in SUITES:
         raise SystemExit("suite inconnue")
-    if not carte.get("re_presser_avant"):
-        raise SystemExit("fiche refusée : pas de date")
-    try:
-        _parse_jour(carte["re_presser_avant"])
-    except ValueError:
-        raise SystemExit("date illisible") from None
+    _exiger_jour(
+        carte.get("re_presser_avant"),
+        manquant="fiche refusée : pas de date",
+    )
     return carte
 
 
 def juger(carte: dict, aujourd: date | None = None) -> dict:
-    jour = _parse_jour(carte["re_presser_avant"])
+    jour = _exiger_jour(
+        carte.get("re_presser_avant"),
+        manquant="fiche refusée : pas de date",
+    )
     here = aujourd or _aujourd_hui()
     reste = (jour - here).days
-    if reste < 0:
+    if reste <= 0:
         return {
             "decision": "deny",
             "flag": "horizon",
@@ -141,7 +155,7 @@ def sceller(carte: dict, keys: str = "keys") -> dict:
         raise SystemExit("sceller v0 : seulement suite UFHY1")
     from ufhy1 import sign as ufhy1_sign
 
-    carte["note"] = "scellé UFHY1 local-v0. AND today. QUANTUM n'est pas ce processus."
+    carte["note"] = "scellé UFHY1 local-v0. AND today."
     payload = _payload(carte)
     carte["sceau"] = ufhy1_sign(payload.encode("utf-8"), keys)
     return carte
