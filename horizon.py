@@ -108,7 +108,7 @@ def juger(carte: dict, aujourd: date | None = None) -> dict:
     )
     here = aujourd or _aujourd_hui()
     reste = (jour - here).days
-    if reste < 0:
+    if reste <= 0:
         return {
             "decision": "deny",
             "flag": "horizon",

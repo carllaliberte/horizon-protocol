@@ -202,6 +202,16 @@ class DenyMeansResellNotFake(unittest.TestCase):
             self.assertIn("resseller", out["note"].lower())
             self.assertNotIn("file is fake", out["note"].lower())
 
+    def test_juger_on_the_named_day_is_deny_and_resell(self):
+        named = date(2028, 8, 31)
+        carte = _carte_fichier(re_presser_avant=named.isoformat())
+        jugement = horizon.juger(carte, aujourd=named)
+        self.assertEqual(jugement["decision"], "deny")
+        self.assertEqual(jugement["jours_restants"], 0)
+        self.assertIn("resseller", jugement["note"].lower())
+        self.assertNotIn("fichier est faux", jugement["note"].lower())
+        self.assertNotIn("file is fake", jugement["note"].lower())
+
     def test_future_card_is_allow(self):
         carte = horizon.ecrire("UFHY1", FUTURE)
         jugement = horizon.juger(carte)
@@ -279,6 +289,19 @@ class ReadmeDoorCopy(unittest.TestCase):
         self.assertIn("YYYY-MM-DD", text)
         self.assertIn("python3 horizon.py ecrire|lire|juger", text)
         self.assertIn("suite name, never a calendar date", text)
+
+    def test_readme_names_utc_calendar_day(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("The date is a UTC calendar day.", text)
+
+    def test_readme_says_ufhy1_signs_and_today_hypothesis_or_later(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("UFHY1 signs AND today; the hypothesis is OR later.", text)
+
+    def test_readme_says_named_day_denies_resell_before_utc(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("named day", text.lower())
+        self.assertIn("You resell before that UTC date.", text)
 
     def test_readme_says_deny_means_resell(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")

@@ -23,8 +23,10 @@ Three suites, kept separate:
 | `mldsa87` | declared only — not signed in v0 | we no longer trust the elliptic curve |
 
 `UFHY1` = Ed25519 + **ML-DSA-65**. A suite name, never a calendar date. mode-protocol already refuses UFHY1-as-date; this rail refuses it too.
+UFHY1 signs AND today; the hypothesis is OR later.
 
-`re-presser-avant` must be `YYYY-MM-DD` still ahead at write. Missing date: refuse. Past date at write: refuse.
+`re-presser-avant` is exclusive: the named day is already too late. You resell before that UTC date. Missing date: refuse. Past date at write: refuse. Today at write: refuse.
+The date is a UTC calendar day.
 
 `mldsa87` may be declared. QUANTUM v0 does not sign it. QUANTUM signs later. Keys stay off Git. This repo is not a QUANTUM seal. A merge is not a seal.
 
@@ -33,7 +35,7 @@ Three suites, kept separate:
 - HORIZON names a cryptographic hypothesis and the calendar day it stops being enough.
 - 2026 useful threat = harvest-now-decrypt-later, not a pocket QPU.
 - Suites: `ed25519` | `UFHY1` | `mldsa87`. `UFHY1` is Ed25519 + ML-DSA-65 — a suite, not a date.
-- `re-presser-avant` = `YYYY-MM-DD` still ahead at write. Missing: refuse. Past: refuse.
+- `re-presser-avant` is exclusive `YYYY-MM-DD` (UTC). Named day denies (`reste <= 0`). You resell before that UTC date. Missing: refuse. Past or today at write: refuse.
 - `juger` deny means resell, not « the file is fake ».
 - QUANTUM signs later. Keys off Git. `mldsa87` may be declared; v0 does not sign it. Do not mint `quantique`.
 - This rail is not UNFORGE, QUELLE, or TÉMOIN. No token, L1, PQC cloud, or legal opinion.
@@ -66,6 +68,7 @@ Tests lock the rows below. Nothing in this repository is a theorem. Nothing here
 | missing `re-presser-avant` is refused | **verified** |
 | past date at write is refused | **verified** |
 | future `YYYY-MM-DD` writes | **verified** |
+| `juger` on the named UTC day is deny + resell | **verified** |
 | `juger` deny = resell, not « the file is fake » | **verified** |
 | JSON card is not a QUANTUM seal | **verified** |
 | `mldsa87` may be declared; v0 does not sign it | **verified** |
