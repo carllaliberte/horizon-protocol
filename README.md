@@ -22,7 +22,7 @@ Trois suites, tenues séparées :
 | `UFHY1` | Ed25519 + ML-DSA-65 (`UFHY1:<ed>:<mldsa65>`) | au moins une des deux signatures survit |
 | `mldsa87` | déclarée seulement — non signée en v0 | on ne fait plus confiance à l'elliptique |
 
-`UFHY1` = Ed25519 + **ML-DSA-65**. Un nom de suite, jamais une date de calendrier. mode-protocol refuse déjà UFHY1-comme-date ; cette rail refuse aussi.
+`UFHY1` = Ed25519 + **ML-DSA-65**. Un nom de suite, jamais une date de calendrier. mode-protocol refuse déjà UFHY1-comme-date ; ce rail refuse aussi.
 UFHY1 signe AND aujourd'hui ; l'hypothèse est OR plus tard.
 
 `re-presser-avant` est exclusif : le jour nommé est déjà trop tard. On resselle avant cette date UTC. Date manquante : refus. Date passée à l'écriture : refus. Aujourd'hui à l'écriture : refus.
@@ -30,7 +30,7 @@ La date est un jour de calendrier UTC.
 
 `mldsa87` peut être déclarée. QUANTUM v0 ne la signe pas. QUANTUM signe plus tard. Les clés restent hors Git. Ce dépôt n'est pas un sceau QUANTUM. Un merge n'est pas un sceau.
 
-## Verrous physiques (cette rail)
+## Verrous physiques (ce rail)
 
 - HORIZON nomme une hypothèse cryptographique et le jour de calendrier où elle cesse de suffire.
 - Menace utile 2026 = harvest-now-decrypt-later, pas un QPU de poche.
@@ -38,7 +38,7 @@ La date est un jour de calendrier UTC.
 - `re-presser-avant` est exclusif `YYYY-MM-DD` (UTC). Le jour nommé refuse (`reste <= 0`). On resselle avant cette date UTC. Manquant : refus. Passée ou aujourd'hui à l'écriture : refus.
 - `juger` deny = resseller, pas « le fichier est faux ».
 - QUANTUM signe plus tard. Clés hors Git. `mldsa87` peut être déclarée ; v0 ne la signe pas. Ne pas frapper `quantique`.
-- Cette rail n'est pas UNFORGE, QUELLE, ni TÉMOIN. Pas de token, pas de L1, pas de cloud PQC, pas d'avis juridique.
+- Ce rail n'est pas UNFORGE, QUELLE, ni TÉMOIN. Pas de token, pas de L1, pas de cloud PQC, pas d'avis juridique.
 
 Jugement = Carl : `python3 horizon.py ecrire|lire|juger`.
 
@@ -58,13 +58,13 @@ Verrous physiques (stdlib, sans paquet en plus) :
 python3 -m unittest discover -s tests -v
 ```
 
-## Vérifié vs postulé
+## Vérifié vs présumé
 
 Les tests verrouillent les lignes ci-dessous. Rien dans ce dépôt n'est un théorème. Rien ici n'est un sceau QUANTUM. Un merge n'est pas un sceau.
 
 | Affirmation | Statut |
 |---|---|
-| `UFHY1` comme date de calendrier est refusé | **vérifié** par les tests de cette rail |
+| `UFHY1` comme date de calendrier est refusé | **vérifié** par les tests de ce rail |
 | `re-presser-avant` manquant est refusé | **vérifié** |
 | date passée à l'écriture est refusée | **vérifié** |
 | écriture d'un `YYYY-MM-DD` futur | **vérifié** |
@@ -72,8 +72,8 @@ Les tests verrouillent les lignes ci-dessous. Rien dans ce dépôt n'est un thé
 | `juger` deny = resseller, pas « le fichier est faux » | **vérifié** |
 | la fiche JSON n'est pas un sceau QUANTUM | **vérifié** |
 | `mldsa87` peut être déclarée ; v0 ne la signe pas | **vérifié** |
-| harvest-now-decrypt-later comme menace utile 2026 | **postulé** (modèle de menace, non prouvé ici) |
-| hypothèse UFHY1 (au moins une signature survit) | **postulé** |
+| harvest-now-decrypt-later comme menace utile 2026 | **présumé** (modèle de menace, non prouvé ici) |
+| hypothèse UFHY1 (au moins une signature survit) | **présumé** |
 | signature QUANTUM | **plus tard** — clés hors Git, pas dans ce dépôt |
 | EasyCrypt / formal-layer | **pas ici** |
 | frapper `quantique` | **refusé** |
@@ -89,7 +89,7 @@ Voir [INTERDIT.md](INTERDIT.md). En bref :
 - pas un token, pas un L1, pas un cloud PQC, pas un avis juridique
 - pas un sceau QUANTUM
 - pas `UFHY1` vendu comme une date
-- pas `quantique` frappé sur cette rail
+- pas `quantique` frappé sur ce rail
 
 Un sceau périmé n'est pas faux. Il est à resseller.
 
