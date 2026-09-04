@@ -1,12 +1,12 @@
-# HORIZON Protocol
+# Protocole HORIZON
 
 **Une date où le sceau doit être ressellé.**
 
-HORIZON names the cryptographic hypothesis of an act and the calendar day it stops being enough. The useful 2026 threat is *harvest-now-decrypt-later*, not a pocket QPU.
+HORIZON nomme l'hypothèse cryptographique d'un acte et le jour de calendrier où elle cesse de suffire. La menace utile 2026, c'est *harvest-now-decrypt-later*, pas un QPU de poche.
 
-This repository is version 0. It fits on a phone. Zero token. Zero paid server.
+Ce dépôt est la version 0. Il tient dans un téléphone. Zéro token. Zéro serveur payant.
 
-**Open source (MIT).** The protocol stays public. See [COPYRIGHT.md](COPYRIGHT.md) and [INTERDIT.md](INTERDIT.md).
+**Ouvert (MIT).** Le protocole reste public. Voir [COPYRIGHT.md](COPYRIGHT.md) et [INTERDIT.md](INTERDIT.md).
 
 ## Primitive
 
@@ -14,35 +14,35 @@ This repository is version 0. It fits on a phone. Zero token. Zero paid server.
 sceau  +  suite  +  hypothèse  +  re-presser-avant  →  fiche .horizon.json
 ```
 
-Three suites, kept separate:
+Trois suites, tenues séparées :
 
-| Suite | What v0 carries | Hypothesis |
+| Suite | Ce que v0 porte | Hypothèse |
 |---|---|---|
-| `ed25519` | Ed25519 alone | Shor is not yet at this size |
-| `UFHY1` | Ed25519 + ML-DSA-65 (`UFHY1:<ed>:<mldsa65>`) | at least one of the two signatures survives |
-| `mldsa87` | declared only — not signed in v0 | we no longer trust the elliptic curve |
+| `ed25519` | Ed25519 seul | Shor n'existe pas encore à cette taille |
+| `UFHY1` | Ed25519 + ML-DSA-65 (`UFHY1:<ed>:<mldsa65>`) | au moins une des deux signatures survit |
+| `mldsa87` | déclarée seulement — non signée en v0 | on ne fait plus confiance à l'elliptique |
 
-`UFHY1` = Ed25519 + **ML-DSA-65**. A suite name, never a calendar date. mode-protocol already refuses UFHY1-as-date; this rail refuses it too.
-UFHY1 signs AND today; the hypothesis is OR later.
+`UFHY1` = Ed25519 + **ML-DSA-65**. Un nom de suite, jamais une date de calendrier. mode-protocol refuse déjà UFHY1-comme-date ; cette rail refuse aussi.
+UFHY1 signe AND aujourd'hui ; l'hypothèse est OR plus tard.
 
-`re-presser-avant` is exclusive: the named day is already too late. You resell before that UTC date. Missing date: refuse. Past date at write: refuse. Today at write: refuse.
-The date is a UTC calendar day.
+`re-presser-avant` est exclusif : le jour nommé est déjà trop tard. On resselle avant cette date UTC. Date manquante : refus. Date passée à l'écriture : refus. Aujourd'hui à l'écriture : refus.
+La date est un jour de calendrier UTC.
 
-`mldsa87` may be declared. QUANTUM v0 does not sign it. QUANTUM signs later. Keys stay off Git. This repo is not a QUANTUM seal. A merge is not a seal.
+`mldsa87` peut être déclarée. QUANTUM v0 ne la signe pas. QUANTUM signe plus tard. Les clés restent hors Git. Ce dépôt n'est pas un sceau QUANTUM. Un merge n'est pas un sceau.
 
-## Physics locks (this rail)
+## Verrous physiques (cette rail)
 
-- HORIZON names a cryptographic hypothesis and the calendar day it stops being enough.
-- 2026 useful threat = harvest-now-decrypt-later, not a pocket QPU.
-- Suites: `ed25519` | `UFHY1` | `mldsa87`. `UFHY1` is Ed25519 + ML-DSA-65 — a suite, not a date.
-- `re-presser-avant` is exclusive `YYYY-MM-DD` (UTC). Named day denies (`reste <= 0`). You resell before that UTC date. Missing: refuse. Past or today at write: refuse.
-- `juger` deny means resell, not « the file is fake ».
-- QUANTUM signs later. Keys off Git. `mldsa87` may be declared; v0 does not sign it. Do not mint `quantique`.
-- This rail is not UNFORGE, QUELLE, or TÉMOIN. No token, L1, PQC cloud, or legal opinion.
+- HORIZON nomme une hypothèse cryptographique et le jour de calendrier où elle cesse de suffire.
+- Menace utile 2026 = harvest-now-decrypt-later, pas un QPU de poche.
+- Suites : `ed25519` | `UFHY1` | `mldsa87`. `UFHY1` = Ed25519 + ML-DSA-65 — une suite, pas une date.
+- `re-presser-avant` est exclusif `YYYY-MM-DD` (UTC). Le jour nommé refuse (`reste <= 0`). On resselle avant cette date UTC. Manquant : refus. Passée ou aujourd'hui à l'écriture : refus.
+- `juger` deny = resseller, pas « le fichier est faux ».
+- QUANTUM signe plus tard. Clés hors Git. `mldsa87` peut être déclarée ; v0 ne la signe pas. Ne pas frapper `quantique`.
+- Cette rail n'est pas UNFORGE, QUELLE, ni TÉMOIN. Pas de token, pas de L1, pas de cloud PQC, pas d'avis juridique.
 
-Judgment = Carl: `python3 horizon.py ecrire|lire|juger`.
+Jugement = Carl : `python3 horizon.py ecrire|lire|juger`.
 
-## How to run
+## Lancer
 
 ```bash
 python3 horizon.py ecrire --suite UFHY1 --cible unforge --re-presser-avant 2028-08-31
@@ -50,38 +50,38 @@ python3 horizon.py lire examples/hybride.horizon.json
 python3 horizon.py juger examples/hybride.horizon.json
 ```
 
-A judge `deny` does not say the file is fake. It says: resell.
+Un `deny` de `juger` ne dit pas que le fichier est faux. Il dit : resseller.
 
-Physics locks (stdlib, no extra packages):
+Verrous physiques (stdlib, sans paquet en plus) :
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-## Verified vs assumed
+## Vérifié vs postulé
 
-Tests lock the rows below. Nothing in this repository is a theorem. Nothing here is a QUANTUM seal. A merge is not a seal.
+Les tests verrouillent les lignes ci-dessous. Rien dans ce dépôt n'est un théorème. Rien ici n'est un sceau QUANTUM. Un merge n'est pas un sceau.
 
-| Claim | Status |
+| Affirmation | Statut |
 |---|---|
-| `UFHY1` as a calendar date is refused | **verified** by tests on this rail |
-| missing `re-presser-avant` is refused | **verified** |
-| past date at write is refused | **verified** |
-| future `YYYY-MM-DD` writes | **verified** |
-| `juger` on the named UTC day is deny + resell | **verified** |
-| `juger` deny = resell, not « the file is fake » | **verified** |
-| JSON card is not a QUANTUM seal | **verified** |
-| `mldsa87` may be declared; v0 does not sign it | **verified** |
-| harvest-now-decrypt-later as the 2026 useful threat | **assumed** (threat model, not proven here) |
-| UFHY1 hypothesis (at least one signature survives) | **assumed** |
-| QUANTUM signature | **later** — keys off Git, not in this repo |
-| EasyCrypt / formal-layer | **not here** |
-| mint `quantique` | **refused** |
-| pocket QPU as the 2026 useful threat | **refused** |
+| `UFHY1` comme date de calendrier est refusé | **vérifié** par les tests de cette rail |
+| `re-presser-avant` manquant est refusé | **vérifié** |
+| date passée à l'écriture est refusée | **vérifié** |
+| écriture d'un `YYYY-MM-DD` futur | **vérifié** |
+| `juger` le jour nommé UTC = deny + resseller | **vérifié** |
+| `juger` deny = resseller, pas « le fichier est faux » | **vérifié** |
+| la fiche JSON n'est pas un sceau QUANTUM | **vérifié** |
+| `mldsa87` peut être déclarée ; v0 ne la signe pas | **vérifié** |
+| harvest-now-decrypt-later comme menace utile 2026 | **postulé** (modèle de menace, non prouvé ici) |
+| hypothèse UFHY1 (au moins une signature survit) | **postulé** |
+| signature QUANTUM | **plus tard** — clés hors Git, pas dans ce dépôt |
+| EasyCrypt / formal-layer | **pas ici** |
+| frapper `quantique` | **refusé** |
+| QPU de poche comme menace utile 2026 | **refusé** |
 
-## What v0 is not
+## Ce que v0 n'est pas
 
-See [INTERDIT.md](INTERDIT.md). In short:
+Voir [INTERDIT.md](INTERDIT.md). En bref :
 
 - pas UNFORGE (le sceau reste le sceau)
 - pas QUELLE (l'origine d'un bit n'est pas une date)
