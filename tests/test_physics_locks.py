@@ -308,6 +308,16 @@ class ReadmeDoorCopy(unittest.TestCase):
         self.assertIn("resseller", text)
         self.assertIn("le fichier est faux", text)
 
+    def test_readme_expert_taste_ce_rail_and_presume(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("ce rail", text)
+        self.assertIn("Ce rail", text)
+        self.assertNotIn("cette rail", text)
+        self.assertNotIn("Cette rail", text)
+        self.assertIn("Vérifié vs présumé", text)
+        self.assertNotIn("assumé", text)
+        self.assertNotIn("postulé", text)
+
     def test_interdit_stays(self):
         text = (ROOT / "INTERDIT.md").read_text(encoding="utf-8")
         self.assertIn("re_presser_avant", text)
