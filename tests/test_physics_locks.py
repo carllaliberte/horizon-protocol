@@ -288,25 +288,25 @@ class ReadmeDoorCopy(unittest.TestCase):
         self.assertIn("`mldsa87`", text)
         self.assertIn("YYYY-MM-DD", text)
         self.assertIn("python3 horizon.py ecrire|lire|juger", text)
-        self.assertIn("suite name, never a calendar date", text)
+        self.assertIn("nom de suite, jamais une date de calendrier", text)
 
     def test_readme_names_utc_calendar_day(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("The date is a UTC calendar day.", text)
+        self.assertIn("La date est un jour de calendrier UTC.", text)
 
     def test_readme_says_ufhy1_signs_and_today_hypothesis_or_later(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("UFHY1 signs AND today; the hypothesis is OR later.", text)
+        self.assertIn("UFHY1 signe AND aujourd'hui ; l'hypothèse est OR plus tard.", text)
 
     def test_readme_says_named_day_denies_resell_before_utc(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("named day", text.lower())
-        self.assertIn("You resell before that UTC date.", text)
+        self.assertIn("jour nommé", text)
+        self.assertIn("On resselle avant cette date UTC.", text)
 
     def test_readme_says_deny_means_resell(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("resell", text)
-        self.assertIn("the file is fake", text)
+        self.assertIn("resseller", text)
+        self.assertIn("le fichier est faux", text)
 
     def test_interdit_stays(self):
         text = (ROOT / "INTERDIT.md").read_text(encoding="utf-8")
